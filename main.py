@@ -13,7 +13,7 @@ class AplicacionConPestanas(ctk.CTk):
         self.title("Burger Queen")
         self.geometry("1200x700")
 
-        # Inicializar la Biblioteca
+        # Inicializar el contenedor de ingredientes
         self.contenedor = Contenedor()
 
         # Crear pestañas
@@ -56,7 +56,7 @@ class AplicacionConPestanas(ctk.CTk):
         self.boton_ingresar.pack(pady=10)
 
         # Botón para eliminar ingredienternegna arriba del Treeview
-        self.boton_eliminar = ctk.CTkButton(frame_treeview, text="Eliminar Libro", fg_color="black", text_color="white")
+        self.boton_eliminar = ctk.CTkButton(frame_treeview, text="Eliminar ingrediente", fg_color="black", text_color="white")
         self.boton_eliminar.configure(command=self.eliminar_ingrediente)
         self.boton_eliminar.pack(pady=10)
 
@@ -99,10 +99,10 @@ class AplicacionConPestanas(ctk.CTk):
         if not self.validar_int_positivo(cantidad):
             return
         
-        # Crear una instancia de Libro
+        # Crear una instancia de ingrediente
         ingrediente = Ingrediente(nombre,cantidad)
 
-        # Agregar el libro a la biblioteca
+        # Agregar el ingrediente al contenedor
         if self.contenedor.agregar_ingrediente(ingrediente):
             self.actualizar_treeview()
         else:
@@ -118,7 +118,7 @@ class AplicacionConPestanas(ctk.CTk):
         nombre = item['values'][0]
         #cantidad = item['values'][1]       por ahora no se necesita sacar la cantidad
         
-        # Eliminar el libro de la biblioteca
+        # Eliminar el ingrediente del contenedor
         if self.contenedor.eliminar_ingrediente(nombre):
             self.actualizar_treeview()
         else:
@@ -129,9 +129,9 @@ class AplicacionConPestanas(ctk.CTk):
         for item in self.tree.get_children():
             self.tree.delete(item)
 
-        # Agregar todos los libros de la biblioteca al Treeview
-        for libro in self.contenedor.obtener_ingredientes():
-            self.tree.insert("", "end", values=(libro.nombre,libro.cantidad))
+        # Agregar todos los ingredientes del conteenedor al Treeview
+        for ingrediente in self.contenedor.obtener_ingredientes():
+            self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.cantidad))
 
 
 if __name__ == "__main__":
