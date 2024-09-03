@@ -77,13 +77,17 @@ class AplicacionConPestanas(ctk.CTk):
             CTkMessagebox(title="Error de Validación", message=message, icon="warning")
             return False
     
-    def validar_int(self, presunto_numero):
+    def validar_int_positivo(self, presunto_numero):
         try: int(presunto_numero)
         except: 
             CTkMessagebox(title="Error de Validación", message="Ingrese un numero entero para la cantidad.", icon="warning")
             return False
-        else: 
-            return True
+        else:
+            if int(presunto_numero) <= 0:
+                CTkMessagebox(title="Error",message="El numero debe ser mayor a 0", icon="warning")
+                return False
+            else:
+                return True
 
     def ingresar_ingrediente(self):
         nombre = self.entry_nombre.get()
@@ -92,7 +96,7 @@ class AplicacionConPestanas(ctk.CTk):
         # Validar entradas
         if not self.validar_texto(nombre):
             return
-        if not self.validar_int(cantidad):
+        if not self.validar_int_positivo(cantidad):
             return
         
         # Crear una instancia de Libro
