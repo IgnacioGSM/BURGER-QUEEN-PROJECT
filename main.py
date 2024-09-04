@@ -73,7 +73,7 @@ class AplicacionConPestanas(ctk.CTk):
         frame_superior = ctk.CTkFrame(frame_treeview2)
         frame_superior.pack(side="top", fill="x")
 
-        self.tree = ttk.Treeview(frame_treeview2, columns=("Nombre del Menu","Cantidad", "Precio Unitario"), show="headings")
+        self.tree = ttk.Treeview(frame_treeview2, columns=("Nombre del Menu","Cantidad","Precio Unitario"), show="headings")
         self.tree.heading("Nombre del Menu", text="Nombre del Menu")
         self.tree.heading("Cantidad", text="Cantidad")
         self.tree.heading("Precio Unitario", text="Precion Unitario")
