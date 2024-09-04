@@ -26,7 +26,7 @@ class AplicacionConPestanas(ctk.CTk):
     def crear_pestanas(self):
         # Crear y configurar las pestañas
         self.tab1 = self.tabview.add("Ingreso de Ingredientes")
-        self.tab2 = self.tabview.add("Pedidos ya")
+        self.tab2 = self.tabview.add("Pedidos")
         # Configurar el contenido de la pestaña 1
         self.configurar_pestana1()
         self.configurar_pestana2()
@@ -67,8 +67,17 @@ class AplicacionConPestanas(ctk.CTk):
         self.tree.pack(expand=True, fill="both", padx=10, pady=10)
     
     def configurar_pestana2(self):
-        label = ctk.CTkLabel(self.tab2,text="hola mundo")
-        label.pack(pady=20)
+        frame_treeview2 = ctk.CTkFrame(self.tab2)
+        frame_treeview2.pack(fill="both", expand=True, padx=10, pady=10)
+
+        frame_superior = ctk.CTkFrame(frame_treeview2)
+        frame_superior.pack(side="top", fill="x")
+
+        self.tree = ttk.Treeview(frame_treeview2, columns=("Nombre del Menu","Cantidad", "Precio Unitario"), show="headings")
+        self.tree.heading("Nombre del Menu", text="Nombre del Menu")
+        self.tree.heading("Cantidad", text="Cantidad")
+        self.tree.heading("Precio Unitario", text="Precion Unitario")
+        self.tree.pack(side="bottom", fill="both", padx=10, pady=10)
 
     def validar_texto(self, texto, message="El nombre debe contener solo letras y espacios."):
         if re.match(r"^[a-zA-Z\s]+$", texto):
