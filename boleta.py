@@ -12,7 +12,7 @@ pdf.add_page()
 pdf.set_font("Arial", size=12)
 
 # Agregamos el texto que quetemos a la pagina
-pdf.cell(200, 10, txt="blablalbkalbalbalbalba.", ln=True, align='C')
+pdf.cell(200, 10, txt="Boleta restaurante", ln=True, align='C')
 
 # Guardar el PDF
 pdf.output("mi_primer_pdf.pdf")
