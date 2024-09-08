@@ -2,6 +2,7 @@ import customtkinter as ctk
 from tkinter import ttk
 from clase_ingrediente import Ingrediente
 from clase_contenedor import Contenedor
+from clase_menu import Menu
 import re
 from CTkMessagebox import CTkMessagebox
 
@@ -131,6 +132,28 @@ class AplicacionConPestanas(ctk.CTk):
         for ingrediente in self.contenedor.obtener_ingredientes():
             self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.cantidad))
 
+
+    
+def crear_menu_papasFritas():
+    papas = Ingrediente("papas", 5)
+    return Menu("Papas Fritas", [papas], 500)
+
+def crear_menu_pepsi():
+    bebida  = Ingrediente("bebida", 1)
+    return Menu("Pepsi", [bebida], 1100)
+
+def crear_menu_completo():
+    vienesa = Ingrediente("vienesa", 1)
+    pan_completo = Ingrediente("pan de completo", 1)
+    tomate = Ingrediente("tomate", 1)
+    palta = Ingrediente("palta", 1)
+    return Menu("Completo", [vienesa, pan_completo, tomate, palta], 1800)
+
+def crear_menu_hamburguesa():
+    pan_hamburguesa = Ingrediente("pan de hamburguesa", 1)
+    queso = Ingrediente("lamina de queso", 1)
+    churrasco = Ingrediente("churrasco de carne", 1)
+    return Menu("Hamburguesa", [pan_hamburguesa, queso, churrasco], 3500)
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("System")
