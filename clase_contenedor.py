@@ -23,7 +23,8 @@ class Contenedor:
         else: 
             return False
 
-
-
     def obtener_ingredientes(self):
         return [ing for ing in self.lista_ingredientes]
+
+    def obtener_nombres_ingredientes(self):
+        return [ing.nombre for ing in self.lista_ingredientes]

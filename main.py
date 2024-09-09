@@ -66,6 +66,10 @@ class AplicacionConPestanas(ctk.CTk):
         self.tree.heading("Nombre", text="Nombre")
         self.tree.heading("Cantidad", text="Cantidad")
         self.tree.pack(expand=True, fill="both", padx=10, pady=10)
+
+        self.boton_generar_menu = ctk.CTkButton(frame_treeview, text="Generar Menú", fg_color="black", text_color="white")
+        self.boton_generar_menu.configure(command=self.generar_menu)
+        self.boton_generar_menu.pack(pady=10)
     
     def configurar_pestana2(self):
         label = ctk.CTkLabel(self.tab2,text="hola mundo")
@@ -132,6 +136,25 @@ class AplicacionConPestanas(ctk.CTk):
         for ingrediente in self.contenedor.obtener_ingredientes():
             self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.cantidad))
 
+    def generar_menu(self):      # Este boton debe verificar si hay suficientes ingredientes para crear cada menu
+        global menus
+        print("Generando menús...")
+        for menu in menus:
+            print(menu.nombre)
+            for ing_necesario in menu.ingredientes_necesarios:
+                print(f"    buscando {ing_necesario.nombre}....")
+                if ing_necesario.nombre in self.contenedor.obtener_nombres_ingredientes():
+                    print(f"    {ing_necesario.nombre} encontrado")
+                    for ing_contenedor in self.contenedor.obtener_ingredientes():
+                        if ing_necesario.nombre == ing_contenedor.nombre and ing_necesario.cantidad > ing_contenedor.cantidad:
+                            CTkMessagebox(title="Error", message=f"No hay suficiente {ing_necesario.nombre} para crear el menú {menu.nombre}.", icon="warning")
+                            break
+                else:
+                    CTkMessagebox(title="Error", message=f"No hay suficiente {ing_necesario.nombre} para crear el menú {menu.nombre}.", icon="warning")
+                    break
+            print("--------------------")
+                            
+
 
     
 def crear_menu_papasFritas():
@@ -158,6 +181,8 @@ def crear_menu_hamburguesa():
 if __name__ == "__main__":
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
+
+    menus = [crear_menu_papasFritas(), crear_menu_pepsi(), crear_menu_completo(), crear_menu_hamburguesa()]
 
     app = AplicacionConPestanas()
     app.mainloop()
