@@ -15,7 +15,10 @@ class Contenedor:
         for ing in self.lista_ingredientes:
             if ing.nombre == nombre_ingrediente:
                 for i in range(cantidad):
-                    self.lista_ingredientes.remove(ing)
+                    if ing.cantidad > 1:
+                        ing.cantidad -= 1
+                    else:
+                        self.lista_ingredientes.remove(ing)
                 return True
         else: 
             return False

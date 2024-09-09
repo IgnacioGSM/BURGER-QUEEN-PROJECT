@@ -91,7 +91,7 @@ class AplicacionConPestanas(ctk.CTk):
                 return True
 
     def ingresar_ingrediente(self):
-        nombre = self.entry_nombre.get()
+        nombre = self.entry_nombre.get().lower()
         cantidad = self.entry_cantidad.get()
 
         # Validar entradas
@@ -115,10 +115,10 @@ class AplicacionConPestanas(ctk.CTk):
 
         item = self.tree.item(seleccion)
         nombre = item['values'][0]
-        #cantidad = item['values'][1]       por ahora no se necesita sacar la cantidad
+        cantidad = item['values'][1]       
         
         # Eliminar el ingrediente del contenedor
-        if self.contenedor.eliminar_ingrediente(nombre):
+        if self.contenedor.eliminar_ingrediente(nombre,cantidad):
             self.actualizar_treeview()
         else:
             CTkMessagebox(title="Error", message="El ingrediente no se pudo eliminar.", icon="warning")
