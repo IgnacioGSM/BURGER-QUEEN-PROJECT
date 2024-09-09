@@ -112,10 +112,8 @@ class AplicacionConPestanas(ctk.CTk):
         ingrediente = Ingrediente(nombre,cantidad)
 
         # Agregar el ingrediente al contenedor
-        if self.contenedor.agregar_ingrediente(ingrediente):
-            self.actualizar_treeview()
-        else:
-            CTkMessagebox(title="Error", message="El ingrediente ya está registrado.", icon="warning")
+        self.contenedor.agregar_ingrediente(ingrediente)
+        self.actualizar_treeview()
 
     def eliminar_ingrediente(self):
         seleccion = self.tree.selection()

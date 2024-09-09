@@ -3,9 +3,11 @@ class Contenedor:
         self.lista_ingredientes = []
 
     def agregar_ingrediente(self, ingrediente):
-        for ing in self.lista_ingredientes:
-            if ing.nombre == ingrediente.nombre:
-                return False    # ingrediente ya existe en la lista
+        for i in range(len(self.lista_ingredientes)):
+            if self.lista_ingredientes[i].nombre == ingrediente.nombre:
+                self.lista_ingredientes[i].cantidad += ingrediente.cantidad
+                return True
+                
         self.lista_ingredientes.append(ingrediente)
         return True  # ingrediente agregado como nuevo
 
