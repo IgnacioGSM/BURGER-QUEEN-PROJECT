@@ -78,7 +78,7 @@ class AplicacionConPestanas(ctk.CTk):
         self.tree.heading("Cantidad", text="Cantidad")
         self.tree.heading("Precio Unitario", text="Precion Unitario")
         self.tree.pack(side="bottom", fill="both", padx=10, pady=10)
-
+        
     def validar_texto(self, texto, message="El nombre debe contener solo letras y espacios."):
         if re.match(r"^[a-zA-Z\s]+$", texto):
             return True
