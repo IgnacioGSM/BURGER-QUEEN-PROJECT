@@ -1,21 +1,27 @@
+
+import docx 
 from fpdf import FPDF 
 
 
-# Crear un objeto PDF
-pdf = FPDF()
+
+document = Document()
+
+# titulo boleta
+document.add_heading('Boleta Restaurante', 0)
+
+# agrega informacsiaon
+document.add_paragraph('Razón Social del Negocio')
+document.add_paragraph('RUT: 12345678-9')
+document.add_paragraph('Dirección: Calle Falsa 123')
+document.add_paragraph('Teléfono: +56 9 1234 5678')
 
 
-# Agregar una pagina
-pdf.add_page()
-
-# fuente de la pagina del pdf 
-pdf.set_font("Arial", size=12)
-
-# Agregamos el texto que quetemos a la pagina
-pdf.cell(200, 10, txt="Boleta restaurante", ln=True, align='C')
-
-# Guardar el PDF
-pdf.output("mi_primer_pdf.pdf")
+table = document.add_table(rows=1, cols=4)
+hdr_cells = table.rows[0].cells
+hdr_cells[0].text = 'Nombre'
+hdr_cells[1].text = 'Cantidad'
+hdr_cells[2].text = 'Precio Unitario'
+hdr_cells[3].text = 'Subtotal'
 
 
 
