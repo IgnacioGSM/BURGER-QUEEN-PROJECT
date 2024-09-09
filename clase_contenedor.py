@@ -15,12 +15,16 @@ class Contenedor:
         for ing in self.lista_ingredientes:
             if ing.nombre == nombre_ingrediente:
                 for i in range(cantidad):
-                    self.lista_ingredientes.remove(ing)
+                    if ing.cantidad > 1:
+                        ing.cantidad -= 1
+                    else:
+                        self.lista_ingredientes.remove(ing)
                 return True
         else: 
             return False
 
-
-
     def obtener_ingredientes(self):
         return [ing for ing in self.lista_ingredientes]
+
+    def obtener_nombres_ingredientes(self):
+        return [ing.nombre for ing in self.lista_ingredientes]

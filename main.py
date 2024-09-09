@@ -2,6 +2,7 @@ import customtkinter as ctk
 from tkinter import ttk
 from clase_ingrediente import Ingrediente
 from clase_contenedor import Contenedor
+from clase_menu import Menu
 import re
 from CTkMessagebox import CTkMessagebox
 
@@ -65,6 +66,10 @@ class AplicacionConPestanas(ctk.CTk):
         self.tree.heading("Nombre", text="Nombre")
         self.tree.heading("Cantidad", text="Cantidad")
         self.tree.pack(expand=True, fill="both", padx=10, pady=10)
+
+        self.boton_generar_menu = ctk.CTkButton(frame_treeview, text="Generar Menú", fg_color="black", text_color="white")
+        self.boton_generar_menu.configure(command=self.generar_menu)
+        self.boton_generar_menu.pack(pady=10)
     
     def configurar_pestana2(self):
         frame_treeview2 = ctk.CTkFrame(self.tab2)
@@ -99,7 +104,7 @@ class AplicacionConPestanas(ctk.CTk):
                 return True
 
     def ingresar_ingrediente(self):
-        nombre = self.entry_nombre.get()
+        nombre = self.entry_nombre.get().lower()
         cantidad = self.entry_cantidad.get()
 
         # Validar entradas
@@ -123,10 +128,10 @@ class AplicacionConPestanas(ctk.CTk):
 
         item = self.tree.item(seleccion)
         nombre = item['values'][0]
-        #cantidad = item['values'][1]       por ahora no se necesita sacar la cantidad
+        cantidad = item['values'][1]       
         
         # Eliminar el ingrediente del contenedor
-        if self.contenedor.eliminar_ingrediente(nombre):
+        if self.contenedor.eliminar_ingrediente(nombre,cantidad):
             self.actualizar_treeview()
         else:
             CTkMessagebox(title="Error", message="El ingrediente no se pudo eliminar.", icon="warning")
@@ -140,10 +145,53 @@ class AplicacionConPestanas(ctk.CTk):
         for ingrediente in self.contenedor.obtener_ingredientes():
             self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.cantidad))
 
+    def generar_menu(self):      # Este boton debe verificar si hay suficientes ingredientes para crear cada menu
+        global menus
+        print("Generando menús...")
+        for menu in menus:
+            print(menu.nombre)
+            for ing_necesario in menu.ingredientes_necesarios:
+                print(f"    buscando {ing_necesario.nombre}....")
+                if ing_necesario.nombre in self.contenedor.obtener_nombres_ingredientes():
+                    print(f"    {ing_necesario.nombre} encontrado")
+                    for ing_contenedor in self.contenedor.obtener_ingredientes():
+                        if ing_necesario.nombre == ing_contenedor.nombre and ing_necesario.cantidad > ing_contenedor.cantidad:
+                            CTkMessagebox(title="Error", message=f"No hay suficiente {ing_necesario.nombre} para crear el menú {menu.nombre}.", icon="warning")
+                            break
+                else:
+                    CTkMessagebox(title="Error", message=f"No hay suficiente {ing_necesario.nombre} para crear el menú {menu.nombre}.", icon="warning")
+                    break
+            print("--------------------")
+                            
+
+
+    
+def crear_menu_papasFritas():
+    papas = Ingrediente("papas", 5)
+    return Menu("Papas Fritas", [papas], 500)
+
+def crear_menu_pepsi():
+    bebida  = Ingrediente("bebida", 1)
+    return Menu("Pepsi", [bebida], 1100)
+
+def crear_menu_completo():
+    vienesa = Ingrediente("vienesa", 1)
+    pan_completo = Ingrediente("pan de completo", 1)
+    tomate = Ingrediente("tomate", 1)
+    palta = Ingrediente("palta", 1)
+    return Menu("Completo", [vienesa, pan_completo, tomate, palta], 1800)
+
+def crear_menu_hamburguesa():
+    pan_hamburguesa = Ingrediente("pan de hamburguesa", 1)
+    queso = Ingrediente("lamina de queso", 1)
+    churrasco = Ingrediente("churrasco de carne", 1)
+    return Menu("Hamburguesa", [pan_hamburguesa, queso, churrasco], 3500)
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
+
+    menus = [crear_menu_papasFritas(), crear_menu_pepsi(), crear_menu_completo(), crear_menu_hamburguesa()]
 
     app = AplicacionConPestanas()
     app.mainloop()
