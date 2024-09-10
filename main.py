@@ -7,6 +7,7 @@ import re
 from CTkMessagebox import CTkMessagebox
 from PIL import Image
 from clase_pedido import Pedido
+from fpdf import FPDF
 
 class AplicacionConPestanas(ctk.CTk):
     def __init__(self):
@@ -257,7 +258,7 @@ class AplicacionConPestanas(ctk.CTk):
             CTkMessagebox(title="Stock Insuficiente", message=f"No hay suficientes ingredientes para preparar el menú '{menu.nombre}'.", icon="warning")
 
     def generar_boleta(self):
-            if not self.pedidos:
+            if not self.pedido:
                 CTkMessagebox(title="Error", message="No hay pedidos para generar la boleta.", icon="warning")
                 return
 
@@ -281,12 +282,12 @@ class AplicacionConPestanas(ctk.CTk):
             pdf.cell(60, 10, txt="Precio Unitario", border=1)
             pdf.ln()
 
-            for pedido in self.pedidos:
-                pdf.cell(100, 10, txt=pedido["nombre"], border=1)
-                pdf.cell(30, 10, txt=str(pedido["cantidad"]), border=1)
-                pdf.cell(60, 10, txt=f"${pedido['precio']:.2f}", border=1)
+            for pedido in self.pedido.menus:
+                pdf.cell(100, 10, txt=pedido.nombre, border=1)
+                pdf.cell(30, 10, txt="1", border=1)
+                pdf.cell(60, 10, txt=f"${pedido.precio_unitario:.2f}", border=1)
                 pdf.ln()
-                total += pedido["cantidad"] * pedido["precio"]
+                total += pedido.precio_unitario
 
             # Total de la boleta
             pdf.cell(100, 10, txt="Total", border=1)
