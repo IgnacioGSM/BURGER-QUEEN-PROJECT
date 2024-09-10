@@ -14,12 +14,13 @@ class Contenedor:
     def eliminar_ingrediente(self, nombre_ingrediente, cantidad=1):
         for ing in self.lista_ingredientes:
             if ing.nombre == nombre_ingrediente:
-                for i in range(cantidad):
-                    if ing.cantidad > 1:
-                        ing.cantidad -= 1
-                    else:
+                if ing.cantidad >= cantidad:
+                    ing.cantidad -= cantidad
+                    if ing.cantidad == 0:
                         self.lista_ingredientes.remove(ing)
-                return True
+                    return True
+                else:
+                    return False
         else: 
             return False
 
