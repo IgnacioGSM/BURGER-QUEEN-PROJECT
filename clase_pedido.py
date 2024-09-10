@@ -6,4 +6,4 @@ class Pedido:
         self.menus.append(menu)
 
     def calcular_total(self):
-        return sum(menu.precio for menu in self.menus)
+        return sum(menu.precio_unitario for menu in self.menus)

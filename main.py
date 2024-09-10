@@ -79,18 +79,27 @@ class AplicacionConPestanas(ctk.CTk):
         self.boton_generar_menu.pack(pady=10)
     
     def configurar_pestana2(self):
-        frame_treeview2 = ctk.CTkFrame(self.tab2)
-        frame_treeview2.pack(fill="both", expand=True, padx=10, pady=10)
-
-        self.tarjetas_frame = ctk.CTkFrame(frame_treeview2)
+        self.tarjetas_frame = ctk.CTkFrame(self.tab2)
         self.tarjetas_frame.pack(side="top", fill="x")
 
-        self.tree2 = ttk.Treeview(frame_treeview2, columns=("Nombre del Menu","Cantidad","Precio Unitario"), show="headings")
+        self.total_frame = ctk.CTkFrame(self.tab2)
+        self.total_frame.pack(pady=10)
+
+        self.frame_treeview2 = ctk.CTkFrame(self.tab2)
+        self.frame_treeview2.pack(fill="both", expand=True, padx=10, pady=10)
+
+        self.label_total = ctk.CTkLabel(self.total_frame, text="Total: $0.00", font=("Helvetica", 12, "bold"))
+        self.label_total.pack(pady=10)
+
+
+        self.tree2 = ttk.Treeview(self.frame_treeview2, columns=("Nombre del Menu","Cantidad","Precio Unitario"), show="headings")
         self.tree2.heading("Nombre del Menu", text="Nombre del Menu")
         self.tree2.heading("Cantidad", text="Cantidad")
         self.tree2.heading("Precio Unitario", text="Precion Unitario")
         self.tree2.pack(side="bottom", fill="both", padx=10, pady=10)
 
+        self.boton_generar_boleta = ctk.CTkButton(self.tab2, text="Generar Boleta", command=self.generar_boleta)
+        self.boton_generar_boleta.pack(pady=10)
         
         self.tarjetas_creadas = 0
         for menu in self.menus_registrados:
@@ -246,7 +255,49 @@ class AplicacionConPestanas(ctk.CTk):
         else:
             # Mostrar un mensaje indicando que no hay suficientes ingredientes usando CTkMessagebox
             CTkMessagebox(title="Stock Insuficiente", message=f"No hay suficientes ingredientes para preparar el menú '{menu.nombre}'.", icon="warning")
-                            
+
+    def generar_boleta(self):
+            if not self.pedidos:
+                CTkMessagebox(title="Error", message="No hay pedidos para generar la boleta.", icon="warning")
+                return
+
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size=12)
+
+            # Encabezado de la boleta
+            pdf.cell(0, 10, txt="Restaurante XYZ", ln=True, align="C")
+            pdf.cell(0, 10, txt="Dirección: Calle Ejemplo 123", ln=True, align="C")
+            pdf.cell(0, 10, txt="Teléfono: (123) 456-7890", ln=True, align="C")
+            pdf.cell(0, 10, txt="", ln=True, align="C")
+            pdf.cell(0, 10, txt="Boleta de Pedido", ln=True, align="C")
+            pdf.cell(0, 10, txt="Fecha: ", ln=True, align="C")
+            pdf.cell(0, 10, txt="", ln=True)
+
+            total = 0
+            pdf.cell(0, 10, txt="Detalle del Pedido", ln=True, align="L")
+            pdf.cell(100, 10, txt="Nombre", border=1)
+            pdf.cell(30, 10, txt="Cantidad", border=1)
+            pdf.cell(60, 10, txt="Precio Unitario", border=1)
+            pdf.ln()
+
+            for pedido in self.pedidos:
+                pdf.cell(100, 10, txt=pedido["nombre"], border=1)
+                pdf.cell(30, 10, txt=str(pedido["cantidad"]), border=1)
+                pdf.cell(60, 10, txt=f"${pedido['precio']:.2f}", border=1)
+                pdf.ln()
+                total += pedido["cantidad"] * pedido["precio"]
+
+            # Total de la boleta
+            pdf.cell(100, 10, txt="Total", border=1)
+            pdf.cell(30, 10, txt="", border=1)
+            pdf.cell(60, 10, txt=f"${total:.2f}", border=1)
+
+            # Guardar el archivo PDF
+            pdf.output("boleta_pedido.pdf")
+            CTkMessagebox(title="Boleta Generada", message="La boleta se ha generado correctamente.", icon="info")    
+
+    
 
 
     
