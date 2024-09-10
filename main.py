@@ -6,6 +6,7 @@ from clase_menu import Menu
 import re
 from CTkMessagebox import CTkMessagebox
 from PIL import Image
+from clase_pedido import Pedido
 
 class AplicacionConPestanas(ctk.CTk):
     def __init__(self):
@@ -17,6 +18,8 @@ class AplicacionConPestanas(ctk.CTk):
 
         # Inicializar el contenedor de ingredientes
         self.contenedor = Contenedor()
+
+        self.pedido = Pedido()
 
         self.menus_registrados = [crear_menu_papasFritas(), crear_menu_pepsi(), crear_menu_completo(), crear_menu_hamburguesa()]
 
@@ -190,6 +193,13 @@ class AplicacionConPestanas(ctk.CTk):
         # Agregar todos los ingredientes del conteenedor al Treeview
         for ingrediente in self.contenedor.obtener_ingredientes():
             self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.cantidad))
+
+    def actualizar_treeview_pedido(self):
+        for item in self.tree2.get_children():
+            self.tree2.delete(item)
+
+        for menu in self.pedido.menus:
+            self.tree2.insert("", "end", values=(menu.nombre, len(menu.ingredientes_necesarios), menu.precio_unitario))
 
     def generar_menu(self):      # Este boton debe verificar si hay suficientes ingredientes para crear cada menu
         print("Generando menús...")
