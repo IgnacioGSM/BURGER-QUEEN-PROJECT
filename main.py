@@ -18,7 +18,7 @@ class AplicacionConPestanas(ctk.CTk):
         # Inicializar el contenedor de ingredientes
         self.contenedor = Contenedor()
 
-        self.menus_creados = [crear_menu_papasFritas(), crear_menu_pepsi(), crear_menu_completo(), crear_menu_hamburguesa()]
+        self.menus_registrados = [crear_menu_papasFritas(), crear_menu_pepsi(), crear_menu_completo(), crear_menu_hamburguesa()]
 
         # Crear pestañas
         self.tabview = ctk.CTkTabview(self, width=600, height=500)
@@ -84,8 +84,8 @@ class AplicacionConPestanas(ctk.CTk):
         frame_treeview2 = ctk.CTkFrame(self.tab2)
         frame_treeview2.pack(fill="both", expand=True, padx=10, pady=10)
 
-        tarjetas_frame = ctk.CTkFrame(frame_treeview2)
-        tarjetas_frame.pack(side="top", fill="x")
+        self.tarjetas_frame = ctk.CTkFrame(frame_treeview2)
+        self.tarjetas_frame.pack(side="top", fill="x")
 
         self.tree2 = ttk.Treeview(frame_treeview2, columns=("Nombre del Menu","Cantidad","Precio Unitario"), show="headings")
         self.tree2.heading("Nombre del Menu", text="Nombre del Menu")
@@ -93,15 +93,18 @@ class AplicacionConPestanas(ctk.CTk):
         self.tree2.heading("Precio Unitario", text="Precion Unitario")
         self.tree2.pack(side="bottom", fill="both", padx=10, pady=10)
 
-        for menu in self.menus_creados:
+        
+        self.tarjetas_creadas = 0
+        for menu in self.menus_registrados:
             self.crear_tarjeta(menu)
+            self.tarjetas_creadas += 1
 
     def crear_tarjeta(self, menu):
         # Obtener el número de columnas y filas actuales
-        num_tarjetas = len(self.menus_creados)
+        num_tarjetas = self.tarjetas_creadas
         fila = num_tarjetas // 2
         columna = num_tarjetas % 2
-
+        
         # Crear la tarjeta con un tamaño fijo
         tarjeta = ctk.CTkFrame(self.tarjetas_frame, corner_radius=10, border_width=1, border_color="#4CAF50", width=64, height=140, fg_color="transparent")
         tarjeta.grid(row=fila, column=columna, padx=15, pady=15)
@@ -190,7 +193,7 @@ class AplicacionConPestanas(ctk.CTk):
 
     def generar_menu(self):      # Este boton debe verificar si hay suficientes ingredientes para crear cada menu
         print("Generando menús...")
-        for menu in self.menus_creados:
+        for menu in self.menus_registrados:
             print(menu.nombre)
             for ing_necesario in menu.ingredientes_necesarios:
                 print(f"    buscando {ing_necesario.nombre}....")
@@ -210,7 +213,7 @@ class AplicacionConPestanas(ctk.CTk):
         suficiente_stock = True
         if self.contenedor.lista_ingredientes==[]:
             suficiente_stock=False
-        for ingrediente_necesario in menu.ingredientes:
+        for ingrediente_necesario in menu.ingredientes_necesarios:
             for ingrediente_stock in self.contenedor.lista_ingredientes:
                 if ingrediente_necesario.nombre == ingrediente_stock.nombre:
                     if int(ingrediente_stock.cantidad) < int(ingrediente_necesario.cantidad):
@@ -221,7 +224,7 @@ class AplicacionConPestanas(ctk.CTk):
         
         if suficiente_stock:
             # Descontar los ingredientes del stock
-            for ingrediente_necesario in menu.ingredientes:
+            for ingrediente_necesario in menu.ingredientes_necesarios:
                 for ingrediente_stock in self.contenedor.lista_ingredientes:
                     if ingrediente_necesario.nombre == ingrediente_stock.nombre:
                         ingrediente_stock.cantidad = str(int(ingrediente_stock.cantidad) - int(ingrediente_necesario.cantidad))
@@ -244,12 +247,12 @@ class AplicacionConPestanas(ctk.CTk):
     
 def crear_menu_papasFritas():
     papas = Ingrediente("papas", 5)
-    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_papas_fritas_64x64.png"), size=(64, 64))
+    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_papas_fritas_64x64.png"), dark_image=Image.open("imagenes/icono_papas_fritas_64x64.png"), size=(64, 64))
     return Menu("Papas Fritas", [papas], 500, imagen)
 
 def crear_menu_pepsi():
     bebida  = Ingrediente("bebida", 1)
-    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_cola_64x64.png"), size=(64, 64))
+    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_cola_64x64.png"), dark_image=Image.open("imagenes/icono_cola_64x64.png"), size=(64, 64))
     return Menu("Pepsi", [bebida], 1100, imagen)
 
 def crear_menu_completo():
@@ -257,14 +260,14 @@ def crear_menu_completo():
     pan_completo = Ingrediente("pan de completo", 1)
     tomate = Ingrediente("tomate", 1)
     palta = Ingrediente("palta", 1)
-    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_hotdog_sin_texto_64x64.png"), size=(64, 64))
+    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_hotdog_sin_texto_64x64.png"), dark_image=Image.open("imagenes/icono_hotdog_sin_texto_64x64.png"), size=(64, 64))
     return Menu("Completo", [vienesa, pan_completo, tomate, palta], 1800, imagen)
 
 def crear_menu_hamburguesa():
     pan_hamburguesa = Ingrediente("pan de hamburguesa", 1)
     queso = Ingrediente("lamina de queso", 1)
     churrasco = Ingrediente("churrasco de carne", 1)
-    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_hamburguesa_negra_64x64.png"), size=(64, 64))
+    imagen = ctk.CTkImage(light_image=Image.open("imagenes/icono_hamburguesa_negra_64x64.png"), dark_image=Image.open("imagenes/icono_hamburguesa_negra_64x64.png"), size=(64, 64))
     return Menu("Hamburguesa", [pan_hamburguesa, queso, churrasco], 3500, imagen)
 
 if __name__ == "__main__":
