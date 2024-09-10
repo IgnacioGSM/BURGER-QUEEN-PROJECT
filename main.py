@@ -78,11 +78,6 @@ class AplicacionConPestanas(ctk.CTk):
         self.boton_generar_menu.configure(command=self.generar_menu)
         self.boton_generar_menu.pack(pady=10)
     
-    
-        self.boton_generar_menu = ctk.CTkButton(frame_treeview, text="Generar Menú", fg_color="black", text_color="white")
-        self.boton_generar_menu.configure(command=self.generar_menu)
-        self.boton_generar_menu.pack(pady=10)
-    
     def configurar_pestana2(self):
         frame_treeview2 = ctk.CTkFrame(self.tab2)
         frame_treeview2.pack(fill="both", expand=True, padx=10, pady=10)
@@ -177,10 +172,10 @@ class AplicacionConPestanas(ctk.CTk):
 
         item = self.tree.item(seleccion)
         nombre = item['values'][0]
-        #cantidad = item['values'][1]       por ahora no se necesita sacar la cantidad
+        cantidad = item['values'][1]       
         
         # Eliminar el ingrediente del contenedor
-        if self.contenedor.eliminar_ingrediente(nombre):
+        if self.contenedor.eliminar_ingrediente(nombre, cantidad):
             self.actualizar_treeview()
         else:
             CTkMessagebox(title="Error", message="El ingrediente no se pudo eliminar.", icon="warning")
